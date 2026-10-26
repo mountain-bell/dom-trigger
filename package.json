@@ -1,0 +1,84 @@
+{
+	"name": "@mountain-bell/dom-trigger",
+	"version": "0.2.0",
+	"description": "JavaScriptで登録したハンドラをHTMLのクラス名でイベントに結び付けるDOMユーティリティ",
+	"license": "MIT",
+	"author": {
+		"name": "mountain-bell",
+		"url": "https://github.com/mountain-bell"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:mountain-bell/dom-trigger.git"
+	},
+	"homepage": "https://github.com/mountain-bell/dom-trigger#readme",
+	"bugs": {
+		"url": "https://github.com/mountain-bell/dom-trigger/issues"
+	},
+	"keywords": [
+		"dom",
+		"event-delegation",
+		"event-handling",
+		"html",
+		"intersection-observer",
+		"vanilla-js",
+		"browser",
+		"typescript"
+	],
+	"type": "module",
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist"
+	],
+	"sideEffects": false,
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.mjs",
+			"require": "./dist/index.cjs"
+		}
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"test": "tsc -p test/tsconfig.json && vitest run --config test/vitest.config.ts",
+		"test:watch": "vitest --config test/vitest.config.ts",
+		"clean": "rimraf dist types-tmp browser",
+		"build:ts": "tsc -p tsconfig.json",
+		"build:npm": "node ./scripts/build-js.mjs src/index.ts --bundle --platform=node --format=cjs --outfile=dist/index.cjs --sourcemap --minify",
+		"build:npm:esm": "node ./scripts/build-js.mjs src/index.ts --bundle --platform=node --format=esm --outfile=dist/index.mjs --sourcemap --minify",
+		"build:browser": "node ./scripts/build-js.mjs src/index.ts --bundle --format=iife --global-name=DomTrigger --outfile=browser/dom-trigger.js --sourcemap --minify --footer:js=\"DomTrigger = DomTrigger.default || DomTrigger;\"",
+		"build:types:raw": "tsc -p tsconfig.types.json",
+		"build:types:bundle": "dts-bundle-generator -o dist/index.d.ts types-tmp/index.d.ts",
+		"build:types:clean": "rimraf types-tmp",
+		"build:types": "npm run build:types:raw && npm run build:types:bundle && npm run build:types:clean",
+		"build": "npm run clean && npm run build:ts && npm run build:npm && npm run build:npm:esm && npm run build:browser && npm run build:types",
+		"dev:ts": "tsc -p tsconfig.json -w",
+		"dev:browser": "node ./scripts/build-js.mjs src/index.ts --bundle --format=iife --global-name=DomTrigger --outfile=browser/dom-trigger.js --sourcemap --watch --footer:js=\"DomTrigger = DomTrigger.default || DomTrigger;\"",
+		"dev": "npm-run-all -p dev:ts dev:browser",
+		"prepublishOnly": "npm run build"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.39.2",
+		"dts-bundle-generator": "^9.5.1",
+		"esbuild": "^0.25.10",
+		"eslint": "^9.39.2",
+		"eslint-config-prettier": "^10.1.8",
+		"globals": "^17.2.0",
+		"npm-run-all": "^4.1.5",
+		"prettier": "3.9.8",
+		"rimraf": "^6.0.1",
+		"stylelint": "^17.1.0",
+		"stylelint-config-recess-order": "^7.6.0",
+		"stylelint-config-standard-scss": "^17.0.0",
+		"typescript": "^5.9.3",
+		"typescript-eslint": "^8.54.0",
+		"@types/node": "^22.20.5",
+		"jsdom": "^26.1.0",
+		"vite": "^7.3.7",
+		"vitest": "^5.0.5"
+	}
+}

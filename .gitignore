@@ -1,0 +1,6 @@
+node_modules/
+dist/
+types-tmp/
+/COMMIT_MESSAGE_RULES.md
+/scripts/*
+!/scripts/build-js.mjs
